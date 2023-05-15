@@ -2,6 +2,7 @@ package com.holidevs.recyclerviewpruebas2.activities;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -26,9 +27,24 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        itemAnimator();
+
         initComponents();
         setListeners();
         setupRecyclerView();
+    }
+
+    private void itemAnimator() {
+
+        RecyclerView recyclerView = findViewById(R.id.recyclerID);
+        RecyclerView.ItemAnimator itemAnimator = new DefaultItemAnimator();
+
+        itemAnimator.setRemoveDuration(150);
+        //itemAnimator.setAddDuration(600);
+        //itemAnimator.setChangeDuration(200);
+        //itemAnimator.setMoveDuration(200);
+
+        recyclerView.setItemAnimator(itemAnimator);
     }
 
     private void initComponents() {

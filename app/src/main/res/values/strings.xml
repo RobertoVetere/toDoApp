@@ -1,6 +1,7 @@
 <resources>
-    <string name="app_name">recyclerViewPruebas2</string>
+    <string name="app_name">App ToDo</string>
     <string name="add_task">add task</string>
     <string name="add">add</string>
-    <string name="recycklerview">To Do List</string>
+    <string name="recycklerview">Mis Tareas</string>
+    <string name="nueva_tarea_txt">Añade una nueva tarea</string>
 </resources>

@@ -8,6 +8,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Toast;
 
 import com.holidevs.recyclerviewpruebas2.R;
 import com.holidevs.recyclerviewpruebas2.models.Task;
@@ -51,12 +52,17 @@ public class SetNewTaskActivity extends AppCompatActivity {
 
         listDatos.add(newTask);
 
-        Intent resultIntent = new Intent();
+        if (title.isEmpty() || date.isEmpty())
+        {
+            Toast.makeText(getApplicationContext(), "Por favor ingrese un título y una fecha válida", Toast.LENGTH_SHORT).show();
+        }else {
+            Intent resultIntent = new Intent();
 
-        resultIntent.putExtra("new_task_title", title);
-        resultIntent.putExtra("new_task_date", date);
+            resultIntent.putExtra("new_task_title", title);
+            resultIntent.putExtra("new_task_date", date);
 
-        setResult(RESULT_OK, resultIntent);
-        finish();
+            setResult(RESULT_OK, resultIntent);
+            finish();
+        }
     }
 }

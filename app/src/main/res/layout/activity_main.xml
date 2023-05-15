@@ -5,6 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
+    android:background="@color/colorBackground"
     android:padding="16dp"
     tools:context=".activities.MainActivity">
 
@@ -21,7 +22,7 @@
             android:layout_height="wrap_content"
             android:layout_marginBottom="20dp"
             android:text="@string/recycklerview"
-            android:textColor="@color/colorText"
+            android:textColor="@color/colorButton"
             android:textSize="32sp"
             android:textStyle="bold" />
 

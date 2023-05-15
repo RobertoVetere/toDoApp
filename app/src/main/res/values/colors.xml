@@ -11,6 +11,7 @@
     <color name="colorButton">#1abc9c</color>
     <color name="colorSelection">#C7C7CC</color>
     <color name="colorToolbar">#F7F7F7</color>
+    <color name="colorLogo">#1abc9c</color>
 
 
 </resources>
