@@ -45,7 +45,9 @@ public class AdapterData extends RecyclerView.Adapter<AdapterData.ViewHolderTask
         holder.btnDeleteTask.setOnClickListener(view -> {
             listDatos.remove(holder.getAdapterPosition());
             notifyItemRemoved(holder.getAdapterPosition());
+
         });
+
 
         holder.checkTask.setOnCheckedChangeListener((compoundButton, isChecked) -> {
             Task task = listDatos.get(holder.getAdapterPosition());
