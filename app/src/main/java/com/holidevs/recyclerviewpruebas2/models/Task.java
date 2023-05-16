@@ -24,6 +24,9 @@ public class Task implements Serializable {
         return date;
     }
 
+    public Boolean getCheck() {
+        return check;
+    }
     public void setTitle(String title) {
         this.title = title;
     }

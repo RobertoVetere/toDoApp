@@ -92,11 +92,23 @@ public class SetNewTaskActivity extends AppCompatActivity {
     }
 
     private String formatDate(int year, int month, int day) {
-        // Formatea la fecha seleccionada como deseado (ejemplo: "dd/MM/yyyy")
-        SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy", Locale.getDefault());
+        // Obtén la fecha actual
+        Calendar currentDate = Calendar.getInstance();
+
+        // Crea el objeto Calendar para la fecha seleccionada
         Calendar selectedDate = Calendar.getInstance();
         selectedDate.set(year, month, day);
+
+        // Verifica si la fecha seleccionada es anterior a la fecha actual
+        if (selectedDate.before(currentDate)) {
+            // La fecha seleccionada es anterior a la fecha actual, muestra un mensaje de error o realiza alguna acción adecuada
+            // Por ejemplo, puedes mostrar un Toast indicando que no se permite seleccionar una fecha en el pasado
+            Toast.makeText(getApplicationContext(), "Selecciona una fecha valida", Toast.LENGTH_SHORT).show();
+            return null; // Devuelve null o algún otro valor adecuado en caso de error
+        }
+
+        // Formatea la fecha seleccionada como deseado (ejemplo: "dd/MM/yyyy")
+        SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy", Locale.getDefault());
         return sdf.format(selectedDate.getTime());
     }
-
 }

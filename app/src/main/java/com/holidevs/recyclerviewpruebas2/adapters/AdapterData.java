@@ -49,9 +49,10 @@ public class AdapterData extends RecyclerView.Adapter<AdapterData.ViewHolderTask
 
         String title = listDatos.get(position).getTitle();
         String date = listDatos.get(position).getDate();
+        Boolean isCheck = listDatos.get(position).getCheck();
         holder.title.setText(title);
         holder.date.setText(date);
-        //holder.checkTask.setChecked(task.isChecked());
+        holder.checkTask.setChecked(isCheck);
 
 
         holder.btnDeleteTask.setOnClickListener(view -> {
@@ -70,6 +71,8 @@ public class AdapterData extends RecyclerView.Adapter<AdapterData.ViewHolderTask
             task.setCheck(isChecked);
             if (isChecked) {
                 Toast.makeText(holder.itemView.getContext(), "Tarea finalizada: " + task.getTitle(), Toast.LENGTH_SHORT).show();
+                mainActivity.saveSharedPreferences();
+                mainActivity.sharedPreferencesLoad();
             }
         });
 

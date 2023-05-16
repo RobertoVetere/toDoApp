@@ -86,6 +86,7 @@
             if (requestCode == 1 && resultCode == RESULT_OK && data != null) {
                 String newTaskTitle = data.getStringExtra("new_task_title");
                 String newTaskDate = data.getStringExtra("new_task_date");
+                //boolean isChecked = data.getBooleanExtra("is_checked", false);
                 Task newTask = new Task(newTaskTitle, newTaskDate, false);
                 listDatos.add(newTask);
                 adapter.notifyDataSetChanged();
