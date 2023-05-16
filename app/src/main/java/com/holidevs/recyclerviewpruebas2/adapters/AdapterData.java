@@ -94,11 +94,4 @@ public class AdapterData extends RecyclerView.Adapter<AdapterData.ViewHolderTask
             checkTask = itemView.findViewById(R.id.checkboxTask);
         }
     }
-
-    public void updateList(ArrayList<Task> newTasks) {
-        listDatos.clear();
-        listDatos.addAll(newTasks);
-        notifyDataSetChanged();
-
-    }
 }

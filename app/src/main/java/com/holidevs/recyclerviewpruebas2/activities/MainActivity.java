@@ -116,11 +116,4 @@
             adapter = new AdapterData(listDatos, this);
             recycler.setAdapter(adapter);
         }
-
-        //Metodo para eliminar una tarea definitivamente de SharedPreference
-        public void removeTask(int position) {
-            listDatos.remove(position);
-            adapter.notifyItemRemoved(position);
-            saveSharedPreferences();
-        }
     }
