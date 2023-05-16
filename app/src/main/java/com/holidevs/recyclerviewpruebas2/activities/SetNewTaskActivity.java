@@ -6,8 +6,10 @@ import android.app.DatePickerDialog;
 import android.content.Intent;
 import android.os.Bundle;
 
+import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Spinner;
 import android.widget.Toast;
 
 import com.holidevs.recyclerviewpruebas2.R;
@@ -23,6 +25,8 @@ public class SetNewTaskActivity extends AppCompatActivity {
     private EditText titleNewTask;
     private EditText dateNewTask;
     private Button add_task_button;
+
+    private Spinner type;
     private ArrayList<Task> listDatos = new ArrayList<>();
 
     @Override
@@ -35,9 +39,12 @@ public class SetNewTaskActivity extends AppCompatActivity {
     }
 
     private void initComponents() {
+
         titleNewTask = findViewById(R.id.titleNewTask);
         dateNewTask = findViewById(R.id.dateNewTask);
         add_task_button = findViewById(R.id.add_task_button);
+        type = findViewById(R.id.spinner_options);
+
     }
 
     private void setListeners() {
@@ -54,19 +61,20 @@ public class SetNewTaskActivity extends AppCompatActivity {
 
         String title = titleNewTask.getText().toString();
         String date = dateNewTask.getText().toString();
+        String selectedOption = type.getSelectedItem().toString();
 
         Task newTask = new Task(title, date, false);
 
         listDatos.add(newTask);
 
-        if (title.isEmpty() || date.isEmpty())
-        {
+        if (title.isEmpty() || date.isEmpty()) {
             Toast.makeText(getApplicationContext(), "Por favor ingrese un título y una fecha válida", Toast.LENGTH_SHORT).show();
-        }else {
+        } else {
             Intent resultIntent = new Intent();
 
             resultIntent.putExtra("new_task_title", title);
             resultIntent.putExtra("new_task_date", date);
+            resultIntent.putExtra("selected_option", selectedOption);
 
             setResult(RESULT_OK, resultIntent);
             finish();

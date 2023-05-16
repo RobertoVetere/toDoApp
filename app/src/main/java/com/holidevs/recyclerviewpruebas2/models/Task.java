@@ -11,6 +11,10 @@ public class Task implements Serializable {
     private String date;
     private Boolean check = false;
 
+    private String type;
+
+    private boolean isDeleted;
+
     public Task(String task_name, String task_data, boolean check) {
         this.title = task_name;
         this.date = task_data;
@@ -20,6 +24,7 @@ public class Task implements Serializable {
     public String getTitle() {
         return title;
     }
+
     public String getDate() {
         return date;
     }
@@ -27,12 +32,8 @@ public class Task implements Serializable {
     public Boolean getCheck() {
         return check;
     }
-    public void setTitle(String title) {
-        this.title = title;
-    }
-
-    public void setDate(String date) {
-        this.date = date;
+    public void setDeleted(boolean deleted) {
+        isDeleted = deleted;
     }
 
     public void setCheck(Boolean check) {

@@ -5,67 +5,75 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:gravity="center"
     android:background="@color/colorButton"
-    >
+    android:gravity="center">
 
-<LinearLayout
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:layout_margin="20dp"
-    android:background="@drawable/layout_border_radious"
-    android:padding="30dp"
-    android:elevation="4dp"
-    android:orientation="vertical"
-    tools:context=".activities.SetNewTaskActivity">
-
-    <TextView
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="@string/nueva_tarea_txt"
-        android:textColor="@color/colorButton"
-        android:textSize="18sp"/>
+        android:layout_margin="20dp"
+        android:background="@drawable/layout_border_radious"
+        android:elevation="4dp"
+        android:orientation="vertical"
+        android:padding="30dp"
+        tools:context=".activities.SetNewTaskActivity">
 
-    <EditText
-        android:id="@+id/titleNewTask"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="32dp"
-        android:hint="Título"
-        android:inputType="text"
-        android:minHeight="48dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/titleNewTask"
-        app:layout_constraintWidth_default="wrap" />
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/nueva_tarea_txt"
+            android:textColor="@color/colorButton"
+            android:textSize="18sp" />
 
-    <EditText
-        android:id="@+id/dateNewTask"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
-        android:hint="Fecha"
-        android:inputType="none"
-        android:minHeight="48dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/titleNewTask"
-        app:layout_constraintWidth_default="wrap"
-        android:focusable="false"
-        android:focusableInTouchMode="false"/>
+        <EditText
+            android:id="@+id/titleNewTask"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="32dp"
+            android:hint="Título"
+            android:inputType="text"
+            android:minHeight="48dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/titleNewTask"
+            app:layout_constraintWidth_default="wrap" />
 
-    <androidx.appcompat.widget.AppCompatButton
-        android:id="@+id/add_task_button"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
-        android:background="@drawable/rounded_button"
-        android:text="Agregar"
-        android:textColor="@color/white"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/dateNewTask" />
+        <EditText
+            android:id="@+id/dateNewTask"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:focusable="false"
+            android:focusableInTouchMode="false"
+            android:hint="Fecha"
+            android:inputType="none"
 
-</LinearLayout>
+            android:minHeight="48dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/titleNewTask"
+            app:layout_constraintWidth_default="wrap" />
+
+        <Spinner
+            android:id="@+id/spinner_options"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:entries="@array/options_array"
+            android:minHeight="48dp" />
+
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/add_task_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:background="@drawable/rounded_button"
+            android:text="Agregar"
+            android:textColor="@color/white"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/dateNewTask" />
+
+    </LinearLayout>
 
 </LinearLayout>

@@ -4,8 +4,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
     android:background="@color/colorBackground"
+    android:orientation="vertical"
     android:padding="16dp"
     tools:context=".activities.MainActivity">
 
@@ -14,25 +14,69 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintEnd_toStartOf="@id/linearBtn"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toStartOf="@id/linearBtn">
+        app:layout_constraintTop_toTopOf="parent">
 
         <ImageView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:src="@mipmap/ic_launcher_bg_remove_foreground"
+            android:layout_marginBottom="16dp"
             android:contentDescription="logo app"
-            android:layout_marginBottom="16dp" />
+            android:src="@mipmap/ic_launcher_bg_remove_foreground" />
 
+        <!-- Este es un comentario en XML
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="20dp"
+            android:orientation="horizontal">
+
+            <androidx.appcompat.widget.AppCompatButton
+                android:id="@+id/btn_allTasks"
+                android:layout_width="0dp"
+                android:layout_height="35dp"
+                android:layout_marginEnd="5dp"
+                android:layout_weight="1"
+                android:background="@drawable/rounded_button"
+                android:contentDescription="@string/add_task"
+                android:paddingEnd="10dp"
+                android:text="ALL"
+                android:textColor="#ffffff" />
+
+            <androidx.appcompat.widget.AppCompatButton
+                android:id="@+id/btn_personal"
+                android:layout_width="0dp"
+                android:layout_height="35dp"
+                android:layout_marginHorizontal="5dp"
+                android:layout_weight="1"
+                android:background="@drawable/rounded_button"
+                android:contentDescription="@string/add_task"
+                android:text="PERSONAL"
+                android:textColor="#ffffff"
+                android:textColorHint="@color/white" />
+
+            <androidx.appcompat.widget.AppCompatButton
+                android:id="@+id/btn_professional"
+                android:layout_width="0dp"
+                android:layout_height="35dp"
+                android:layout_marginStart="5dp"
+                android:layout_weight="1"
+                android:background="@drawable/rounded_button"
+                android:contentDescription="@string/add_task"
+                android:text="WORK"
+                android:textColor="#ffffff" />
+        </LinearLayout>
+        -->
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginBottom="20dp"
             android:text="@string/recycklerview"
             android:textColor="@color/colorButton"
-            android:textSize="32sp"
+            android:textSize="22sp"
             android:textStyle="bold" />
+
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/recyclerID"
@@ -49,13 +93,13 @@
         app:layout_constraintBottom_toBottomOf="parent">
 
         <androidx.appcompat.widget.AppCompatButton
-            android:background="@drawable/rounded_button"
             android:id="@+id/btn_add"
             android:layout_width="50dp"
             android:layout_height="50dp"
+            android:background="@drawable/rounded_button"
+            android:contentDescription="@string/add_task"
             android:drawableLeft="@drawable/ic_add"
             android:paddingLeft="13dp"
-            android:contentDescription="@string/add_task"
             android:textColor="#757575" />
 
     </LinearLayout>
