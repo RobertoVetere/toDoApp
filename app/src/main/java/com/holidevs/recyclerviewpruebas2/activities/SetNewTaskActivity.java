@@ -2,10 +2,10 @@ package com.holidevs.recyclerviewpruebas2.activities;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.app.DatePickerDialog;
 import android.content.Intent;
 import android.os.Bundle;
 
-import android.util.Log;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
@@ -13,7 +13,10 @@ import android.widget.Toast;
 import com.holidevs.recyclerviewpruebas2.R;
 import com.holidevs.recyclerviewpruebas2.models.Task;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Locale;
 
 public class SetNewTaskActivity extends AppCompatActivity {
 
@@ -41,6 +44,10 @@ public class SetNewTaskActivity extends AppCompatActivity {
         add_task_button.setOnClickListener(v -> {
             createNewTask();
         });
+
+        dateNewTask.setOnClickListener(v -> {
+            showDatePicker();
+        });
     }
 
     private void createNewTask() {
@@ -65,4 +72,31 @@ public class SetNewTaskActivity extends AppCompatActivity {
             finish();
         }
     }
+
+    private void showDatePicker() {
+        DatePickerDialog.OnDateSetListener dateSetListener = (view, year, monthOfYear, dayOfMonth) -> {
+            // Aquí puedes manejar la fecha seleccionada por el usuario
+            String formattedDate = formatDate(year, monthOfYear, dayOfMonth);
+            dateNewTask.setText(formattedDate);
+        };
+
+        // Obtén la fecha actual para establecerla como fecha predeterminada en el DatePicker
+        Calendar calendar = Calendar.getInstance();
+        int currentYear = calendar.get(Calendar.YEAR);
+        int currentMonth = calendar.get(Calendar.MONTH);
+        int currentDayOfMonth = calendar.get(Calendar.DAY_OF_MONTH);
+
+        // Crea un cuadro de diálogo de DatePicker y muestra el DatePicker
+        DatePickerDialog datePickerDialog = new DatePickerDialog(this, dateSetListener, currentYear, currentMonth, currentDayOfMonth);
+        datePickerDialog.show();
+    }
+
+    private String formatDate(int year, int month, int day) {
+        // Formatea la fecha seleccionada como deseado (ejemplo: "dd/MM/yyyy")
+        SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy", Locale.getDefault());
+        Calendar selectedDate = Calendar.getInstance();
+        selectedDate.set(year, month, day);
+        return sdf.format(selectedDate.getTime());
+    }
+
 }

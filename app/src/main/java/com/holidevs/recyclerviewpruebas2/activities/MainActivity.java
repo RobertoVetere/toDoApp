@@ -20,9 +20,6 @@
     import java.util.ArrayList;
 
     public class MainActivity extends AppCompatActivity {
-
-        //private static final String SHARED_PREFERENCES_NAME = "";
-        //private static final String KEY_TASK_LIST = "";
         private ArrayList<Task> listDatos;
         private Button btn_add;
         private AdapterData adapter;
