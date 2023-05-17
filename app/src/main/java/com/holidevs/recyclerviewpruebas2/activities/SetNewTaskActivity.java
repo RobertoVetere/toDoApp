@@ -63,7 +63,7 @@ public class SetNewTaskActivity extends AppCompatActivity {
         String date = dateNewTask.getText().toString();
         String selectedOption = type.getSelectedItem().toString();
 
-        Task newTask = new Task(title, date, false);
+        Task newTask = new Task(title, date, false, "");
 
         listDatos.add(newTask);
 

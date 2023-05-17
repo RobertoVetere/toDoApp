@@ -13,12 +13,15 @@ public class Task implements Serializable {
 
     private String type;
 
+    private String chatResponse;
+
     private boolean isDeleted;
 
-    public Task(String task_name, String task_data, boolean check) {
+    public Task(String task_name, String task_data, boolean check, String chatResponse) {
         this.title = task_name;
         this.date = task_data;
         this.check = check;
+        this.chatResponse = chatResponse;
     }
 
     public String getTitle() {
@@ -32,6 +35,15 @@ public class Task implements Serializable {
     public Boolean getCheck() {
         return check;
     }
+
+    public String getChatResponse() {
+        return chatResponse;
+    }
+
+    public void setChatResponse(String chatResponse) {
+        this.chatResponse = chatResponse;
+    }
+
     public void setDeleted(boolean deleted) {
         isDeleted = deleted;
     }

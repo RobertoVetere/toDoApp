@@ -2,6 +2,7 @@
     <string name="app_name">Tasky</string>
     <string name="add_task">add task</string>
     <string name="add">add</string>
-    <string name="recycklerview">Todas las tareas</string>
+    <string name="recycklerview">Tus tareas</string>
     <string name="nueva_tarea_txt">Añade una nueva tarea</string>
+    <string name="logo_app">logo app</string>
 </resources>

@@ -25,7 +25,7 @@ public class AdapterData extends RecyclerView.Adapter<AdapterData.ViewHolderTask
     private MainActivity mainActivity;
 
 
-    public AdapterData(ArrayList<Task> listDatos, AdapterData adapterData) {
+    public AdapterData(ArrayList<Task> listDatos) {
         this.listDatos = listDatos;
     }
 
@@ -45,8 +45,6 @@ public class AdapterData extends RecyclerView.Adapter<AdapterData.ViewHolderTask
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolderTask holder, int position) {
-
-        AdapterData adapter = new AdapterData(listDatos, this);
 
         String title = listDatos.get(position).getTitle();
         String date = listDatos.get(position).getDate();

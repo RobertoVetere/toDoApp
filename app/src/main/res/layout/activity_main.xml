@@ -6,102 +6,219 @@
     android:layout_height="match_parent"
     android:background="@color/colorBackground"
     android:orientation="vertical"
-    android:padding="16dp"
     tools:context=".activities.MainActivity">
-
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="match_parent"
         android:orientation="vertical"
-        app:layout_constraintEnd_toStartOf="@id/linearBtn"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
+        android:padding="16dp">
 
-        <ImageView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="16dp"
-            android:contentDescription="logo app"
-            android:src="@mipmap/ic_launcher_bg_remove_foreground" />
 
-        <!-- Este es un comentario en XML
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="20dp"
-            android:orientation="horizontal">
+            android:orientation="vertical"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:ignore="NotSibling">
 
-            <androidx.appcompat.widget.AppCompatButton
-                android:id="@+id/btn_allTasks"
-                android:layout_width="0dp"
-                android:layout_height="35dp"
-                android:layout_marginEnd="5dp"
-                android:layout_weight="1"
-                android:background="@drawable/rounded_button"
-                android:contentDescription="@string/add_task"
-                android:paddingEnd="10dp"
-                android:text="ALL"
-                android:textColor="#ffffff" />
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:contentDescription="@string/logo_app"
+                android:src="@mipmap/ic_launcher_bg_remove_foreground" />
 
-            <androidx.appcompat.widget.AppCompatButton
-                android:id="@+id/btn_personal"
-                android:layout_width="0dp"
-                android:layout_height="35dp"
-                android:layout_marginHorizontal="5dp"
-                android:layout_weight="1"
-                android:background="@drawable/rounded_button"
-                android:contentDescription="@string/add_task"
-                android:text="PERSONAL"
-                android:textColor="#ffffff"
-                android:textColorHint="@color/white" />
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="10dp"
+                android:text="Sugerencias de la IA para la tarea"
+                android:textColor="#555555"
+                android:textSize="18sp"
+                android:textStyle="bold" />
 
-            <androidx.appcompat.widget.AppCompatButton
-                android:id="@+id/btn_professional"
-                android:layout_width="0dp"
-                android:layout_height="35dp"
-                android:layout_marginStart="5dp"
-                android:layout_weight="1"
-                android:background="@drawable/rounded_button"
-                android:contentDescription="@string/add_task"
-                android:text="WORK"
-                android:textColor="#ffffff" />
+            <ScrollView
+                android:layout_width="wrap_content"
+                android:layout_height="200dp">
+
+                <TextView
+                    android:id="@+id/textChatGptResponse"
+                    android:layout_width="380dp"
+                    android:layout_height="200dp"
+                    android:layout_marginBottom="20dp"
+                    android:background="@drawable/rounded_button"
+                    android:elevation="4dp"
+                    android:padding="10dp"
+                    android:text=""
+                    android:textSize="16sp" />
+
+            </ScrollView>
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginVertical="10dp"
+                android:text="@string/recycklerview"
+                android:textColor="#555555"
+                android:textSize="18sp"
+                android:textStyle="bold" />
+
+            <HorizontalScrollView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:scrollbars="none">
+
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/recyclerID"
+                    android:layout_width="wrap_content"
+                    android:layout_height="200dp"
+                    android:orientation="horizontal" />
+            </HorizontalScrollView>
+
         </LinearLayout>
-        -->
-        <TextView
+
+    </LinearLayout>
+
+    <androidx.coordinatorlayout.widget.CoordinatorLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/linearBtn"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="20dp"
-            android:text="@string/recycklerview"
-            android:textColor="@color/colorButton"
-            android:textSize="22sp"
-            android:textStyle="bold" />
+            android:layout_gravity="bottom"
+            android:elevation="4dp"
+            android:gravity="end"
+            android:orientation="horizontal">
 
+            <LinearLayout
+                android:id="@+id/btn_box_1"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:orientation="vertical"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toStartOf="@+id/btn_box_2"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent">
 
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/recyclerID"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
-    </LinearLayout>
+                <androidx.appcompat.widget.AppCompatButton
+                    android:id="@+id/btn_allTasks"
+                    android:layout_width="48dp"
+                    android:layout_height="48dp"
+                    android:paddingLeft="11dp"
+                    android:layout_gravity="center"
+                    android:background="@null"
+                    android:contentDescription="@string/add_task"
+                    android:drawableLeft="@drawable/ic_all" />
 
-    <LinearLayout
-        android:id="@+id/linearBtn"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_margin="10dp"
-        android:gravity="end"
-        app:layout_constraintBottom_toBottomOf="parent">
+                <TextView
+                    android:id="@+id/tv_allTasks"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:text="todo"
+                    android:textColor="#555555" />
 
-        <androidx.appcompat.widget.AppCompatButton
-            android:id="@+id/btn_add"
-            android:layout_width="50dp"
-            android:layout_height="50dp"
-            android:background="@drawable/rounded_button"
-            android:contentDescription="@string/add_task"
-            android:drawableLeft="@drawable/ic_add"
-            android:paddingLeft="13dp"
-            android:textColor="#757575" />
+            </LinearLayout>
 
-    </LinearLayout>
+            <LinearLayout
+                android:id="@+id/btn_box_2"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toStartOf="@id/btn_box_3"
+                app:layout_constraintStart_toEndOf="@id/btn_box_1"
+                app:layout_constraintTop_toTopOf="parent">
+
+                <androidx.appcompat.widget.AppCompatButton
+                    android:id="@+id/btn_personal"
+                    android:layout_width="48dp"
+                    android:layout_height="48dp"
+                    android:paddingLeft="11dp"
+                    android:layout_gravity="center"
+                    android:background="@null"
+                    android:contentDescription="@string/add_task"
+                    android:drawableLeft="@drawable/ic_personal" />
+
+                <TextView
+                    android:id="@+id/tv_personal"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:text="personal"
+                    android:textColor="#555555" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/btn_box_3"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toStartOf="@id/btn_box_4"
+                app:layout_constraintStart_toEndOf="@id/btn_box_2"
+                app:layout_constraintTop_toTopOf="parent">
+
+                <androidx.appcompat.widget.AppCompatButton
+                    android:id="@+id/btn_professional"
+                    android:layout_width="48dp"
+                    android:layout_height="48dp"
+                    android:layout_gravity="center"
+                    android:paddingLeft="12dp"
+                    android:background="@null"
+                    android:contentDescription="@string/add_task"
+                    android:drawableLeft="@drawable/ic_work"
+                    android:textColor="#555555" />
+
+                <TextView
+                    android:id="@+id/tv_professional"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:text="pro"
+                    android:textColor="#555555" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/btn_box_4"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@id/btn_box_3"
+                app:layout_constraintTop_toTopOf="parent">
+
+                <androidx.appcompat.widget.AppCompatButton
+                    android:id="@+id/btn_add"
+                    android:layout_width="48dp"
+                    android:layout_height="48dp"
+                    android:paddingLeft="10dp"
+                    android:layout_gravity="center"
+                    android:background="@null"
+                    android:contentDescription="@string/add_task"
+                    android:drawableLeft="@drawable/ic_add"
+                    android:textColor="#555555" />
+
+                <TextView
+                    android:id="@+id/tv_add"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:text="tarea"
+                    android:textColor="#555555" />
+
+            </LinearLayout>
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+    </androidx.coordinatorlayout.widget.CoordinatorLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

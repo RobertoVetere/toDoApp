@@ -8,6 +8,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
@@ -40,7 +41,9 @@ public class MainActivity extends AppCompatActivity {
     private TextView textViewSummary;
     private AdapterData taskAdapter;
 
-    private static final String API_KEY = "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";
+    private Task task;
+
+    private static final String API_KEY = "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";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -50,16 +53,15 @@ public class MainActivity extends AppCompatActivity {
         sharedPreferencesLoad();
         itemAnimator();
         initComponents();
-        callToChatGPT();
-        initAdapterOnMain();
-        setListeners();
         setupRecyclerView();
+        setListeners();
     }
 
-    private void callToChatGPT() {
+    private void callToChatGPT(String taskTitle, String taskDate, Task task) {
         // Ejemplo de llamada a la API de ChatGPT
-        String taskTitle = "Título de la tarea"; // Obtén el título de la tarea de alguna manera en tu aplicación
-        String taskDate = "Fecha de la tarea"; // Obtén la fecha de la tarea de alguna manera en tu aplicación
+        //String taskTitle = "Título de la tarea"; // Obtén el título de la tarea de alguna manera en tu aplicación
+        //String taskDate = "Fecha de la tarea"; // Obtén la fecha de la tarea de alguna manera en tu aplicación
+
 
         String prompt = "Resumen detallado para la tarea: " + taskTitle + ", Fecha: " + taskDate;
 
@@ -80,6 +82,9 @@ public class MainActivity extends AppCompatActivity {
         Headers headers = new Headers.Builder().add("Authorization", authorizationHeader).build();
 
 
+        Log.i("ChatGptRequest", "Prompt: " + request.getPrompt());
+        Log.i("ChatGptRequest", "Authorization Header: " + authorizationHeader);
+
         // Realiza la solicitud a la API
         Call<ChatGptResponse> call = chatGptService.sendMessage(request);
         call.enqueue(new Callback<ChatGptResponse>() {
@@ -90,17 +95,22 @@ public class MainActivity extends AppCompatActivity {
                     // Procesa la respuesta y muestra el resumen al usuario
                     String summary = chatResponse.getSummary();
                     // Muestra el resumen en la vista de texto (TextView)
-                    textViewSummary.setText(summary);
+                    task.setChatResponse(summary);
+                    System.out.println(summary);
+
+                    Log.i("ChatResponse", "OK");
+                    Log.i("ChatGptResponse", "Response: " + response);
                 } else {
-                    // Maneja errores de la API
+                    Log.i("ChatResponse", "KO");
                 }
             }
 
             @Override
             public void onFailure(Call<ChatGptResponse> call, Throwable t) {
-                // Maneja errores de comunicación
+                System.out.println("La tarea no ha llegado");
             }
         });
+
 
     }
 
@@ -125,15 +135,16 @@ public class MainActivity extends AppCompatActivity {
 
     private void initComponents() {
         btn_add = findViewById(R.id.btn_add);
-        //textViewSummary = findViewById(R.id.textChatGptResponse);
+        textViewSummary = findViewById(R.id.textChatGptResponse);
         //btn_all_tasks = findViewById(R.id.btn_allTasks);
         //btn_personal = findViewById(R.id.btn_personal);
         //btn_professional = findViewById(R.id.btn_professional);
     }
 
-    private void initAdapterOnMain() {
+    private void setupRecyclerView() {
         RecyclerView recycler = findViewById(R.id.recyclerID);
-        recycler.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false));
+        LinearLayoutManager layoutManager = new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false);
+        recycler.setLayoutManager(layoutManager);
         taskAdapter = new AdapterData(listDatos, this);
         recycler.setAdapter(taskAdapter);
     }
@@ -158,11 +169,14 @@ public class MainActivity extends AppCompatActivity {
             String newTaskTitle = data.getStringExtra("new_task_title");
             String newTaskDate = data.getStringExtra("new_task_date");
             //boolean isChecked = data.getBooleanExtra("is_checked", false);
-            Task newTask = new Task(newTaskTitle, newTaskDate, false);
+            Task newTask = new Task(newTaskTitle, newTaskDate, false, "");
             listDatos.add(newTask);
             taskAdapter.updateTasks(listDatos);
 
             saveSharedPreferences();
+
+            //obtener la respuesta de Chatgpt
+            callToChatGPT(newTaskTitle, newTaskDate, newTask);
         }
     }
 
@@ -177,10 +191,4 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
-    private void setupRecyclerView() {
-        RecyclerView recycler = findViewById(R.id.recyclerID);
-        recycler.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false));
-        recycler.setItemAnimator(new DefaultItemAnimator());
-        recycler.setAdapter(taskAdapter);
-    }
 }

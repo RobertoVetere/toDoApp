@@ -2,8 +2,6 @@
 <resources>
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
-
-
     <color name="colorPrimary">#FEDBD0</color>
     <color name="colorSecondary">#FEEAE6</color>
     <color name="colorBackground">#FFFFFF</color>
@@ -12,6 +10,7 @@
     <color name="colorSelection">#C7C7CC</color>
     <color name="colorToolbar">#F7F7F7</color>
     <color name="colorLogo">#1abc9c</color>
+    <color name="colorCard">#1A403C</color>
 
 
 </resources>

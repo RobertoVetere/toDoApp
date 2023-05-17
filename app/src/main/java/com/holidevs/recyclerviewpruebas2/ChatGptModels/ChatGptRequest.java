@@ -11,5 +11,9 @@ public class ChatGptRequest {
     public ChatGptRequest(String prompt) {
         this.prompt = prompt;
     }
+
+    public String getPrompt() {
+        return prompt;
+    }
 }
 
