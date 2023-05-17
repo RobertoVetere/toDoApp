@@ -10,12 +10,22 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
-import android.widget.Toast;
+import android.widget.TextView;
+
+import okhttp3.Headers;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+import retrofit2.Retrofit;
+import retrofit2.converter.gson.GsonConverterFactory;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
+import com.holidevs.recyclerviewpruebas2.ChatGptModels.ChatGptRequest;
+import com.holidevs.recyclerviewpruebas2.ChatGptModels.ChatGptResponse;
 import com.holidevs.recyclerviewpruebas2.R;
 import com.holidevs.recyclerviewpruebas2.adapters.AdapterData;
+import com.holidevs.recyclerviewpruebas2.interfaces.ChatGptService;
 import com.holidevs.recyclerviewpruebas2.models.Task;
 
 import java.lang.reflect.Type;
@@ -26,10 +36,11 @@ public class MainActivity extends AppCompatActivity {
 
     private ArrayList<Task> listDatos;
     private Button btn_add;
-    private Button btn_all_tasks;
-    private Button btn_personal;
-    private Button btn_professional;
+
+    private TextView textViewSummary;
     private AdapterData taskAdapter;
+
+    private static final String API_KEY = "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";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -39,9 +50,58 @@ public class MainActivity extends AppCompatActivity {
         sharedPreferencesLoad();
         itemAnimator();
         initComponents();
+        callToChatGPT();
         initAdapterOnMain();
         setListeners();
         setupRecyclerView();
+    }
+
+    private void callToChatGPT() {
+        // Ejemplo de llamada a la API de ChatGPT
+        String taskTitle = "Título de la tarea"; // Obtén el título de la tarea de alguna manera en tu aplicación
+        String taskDate = "Fecha de la tarea"; // Obtén la fecha de la tarea de alguna manera en tu aplicación
+
+        String prompt = "Resumen detallado para la tarea: " + taskTitle + ", Fecha: " + taskDate;
+
+        // Configura Retrofit
+        Retrofit retrofit = new Retrofit.Builder()
+                .baseUrl("https://api.openai.com/")
+                .addConverterFactory(GsonConverterFactory.create())
+                .build();
+
+        // Crea una instancia del servicio de la API
+        ChatGptService chatGptService = retrofit.create(ChatGptService.class);
+
+        // Crea el objeto de solicitud
+        ChatGptRequest request = new ChatGptRequest(prompt);
+
+        // Agrega el encabezado de autorización con tu clave de API
+        String authorizationHeader = "Bearer " + API_KEY;
+        Headers headers = new Headers.Builder().add("Authorization", authorizationHeader).build();
+
+
+        // Realiza la solicitud a la API
+        Call<ChatGptResponse> call = chatGptService.sendMessage(request);
+        call.enqueue(new Callback<ChatGptResponse>() {
+            @Override
+            public void onResponse(Call<ChatGptResponse> call, Response<ChatGptResponse> response) {
+                if (response.isSuccessful()) {
+                    ChatGptResponse chatResponse = response.body();
+                    // Procesa la respuesta y muestra el resumen al usuario
+                    String summary = chatResponse.getSummary();
+                    // Muestra el resumen en la vista de texto (TextView)
+                    textViewSummary.setText(summary);
+                } else {
+                    // Maneja errores de la API
+                }
+            }
+
+            @Override
+            public void onFailure(Call<ChatGptResponse> call, Throwable t) {
+                // Maneja errores de comunicación
+            }
+        });
+
     }
 
     public void sharedPreferencesLoad() {
@@ -65,6 +125,7 @@ public class MainActivity extends AppCompatActivity {
 
     private void initComponents() {
         btn_add = findViewById(R.id.btn_add);
+        //textViewSummary = findViewById(R.id.textChatGptResponse);
         //btn_all_tasks = findViewById(R.id.btn_allTasks);
         //btn_personal = findViewById(R.id.btn_personal);
         //btn_professional = findViewById(R.id.btn_professional);
