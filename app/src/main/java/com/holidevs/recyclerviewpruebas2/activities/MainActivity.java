@@ -29,6 +29,11 @@ import com.holidevs.recyclerviewpruebas2.adapters.AdapterData;
 import com.holidevs.recyclerviewpruebas2.interfaces.ChatGptService;
 import com.holidevs.recyclerviewpruebas2.models.Task;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.io.IOException;
+import java.io.InputStream;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.List;
@@ -41,9 +46,6 @@ public class MainActivity extends AppCompatActivity {
     private TextView textViewSummary;
     private AdapterData taskAdapter;
 
-    private Task task;
-
-    private static final String API_KEY = "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";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -57,11 +59,39 @@ public class MainActivity extends AppCompatActivity {
         setListeners();
     }
 
-    private void callToChatGPT(String taskTitle, String taskDate, Task task) {
-        // Ejemplo de llamada a la API de ChatGPT
-        //String taskTitle = "Título de la tarea"; // Obtén el título de la tarea de alguna manera en tu aplicación
-        //String taskDate = "Fecha de la tarea"; // Obtén la fecha de la tarea de alguna manera en tu aplicación
+    private void initComponents() {
+        btn_add = findViewById(R.id.btn_add);
+        textViewSummary = findViewById(R.id.textChatGptResponse);
 
+        //btn_all_tasks = findViewById(R.id.btn_allTasks);
+        //btn_personal = findViewById(R.id.btn_personal);
+        //btn_professional = findViewById(R.id.btn_professional);
+    }
+
+    private void setupRecyclerView() {
+        RecyclerView recycler = findViewById(R.id.recyclerID);
+        LinearLayoutManager layoutManager = new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false);
+        recycler.setLayoutManager(layoutManager);
+        taskAdapter = new AdapterData(listDatos, this);
+        recycler.setAdapter(taskAdapter);
+    }
+
+    private void setListeners() {
+        btn_add.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(MainActivity.this, SetNewTaskActivity.class);
+                startActivityForResult(intent, 1);
+            }
+        });
+
+    }
+
+    private void callToChatGPT(String taskTitle, String taskDate, Task task) {
+
+        String API_KEY = readApiKeyFromConfig();
+
+        Log.i("API_KEY", "API Key: " + API_KEY);
 
         String prompt = "Resumen detallado para la tarea: " + taskTitle + ", Fecha: " + taskDate;
 
@@ -133,34 +163,6 @@ public class MainActivity extends AppCompatActivity {
         recyclerView.setItemAnimator(itemAnimator);
     }
 
-    private void initComponents() {
-        btn_add = findViewById(R.id.btn_add);
-        textViewSummary = findViewById(R.id.textChatGptResponse);
-        //btn_all_tasks = findViewById(R.id.btn_allTasks);
-        //btn_personal = findViewById(R.id.btn_personal);
-        //btn_professional = findViewById(R.id.btn_professional);
-    }
-
-    private void setupRecyclerView() {
-        RecyclerView recycler = findViewById(R.id.recyclerID);
-        LinearLayoutManager layoutManager = new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false);
-        recycler.setLayoutManager(layoutManager);
-        taskAdapter = new AdapterData(listDatos, this);
-        recycler.setAdapter(taskAdapter);
-    }
-
-    private void setListeners() {
-        btn_add.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(MainActivity.this, SetNewTaskActivity.class);
-                startActivityForResult(intent, 1);
-            }
-        });
-
-    }
-
-
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
@@ -189,6 +191,22 @@ public class MainActivity extends AppCompatActivity {
         editor.putString("tasks", taskListJson);
         editor.apply();
 
+    }
+
+    private String readApiKeyFromConfig() {
+        String apiKey = null;
+        try {
+            InputStream inputStream = getResources().openRawResource(R.raw.config);
+            byte[] buffer = new byte[inputStream.available()];
+            inputStream.read(buffer);
+            inputStream.close();
+            String jsonContent = new String(buffer, "UTF-8");
+            JSONObject jsonObject = new JSONObject(jsonContent);
+            apiKey = jsonObject.getString("api_key");
+        } catch (IOException | JSONException e) {
+            e.printStackTrace();
+        }
+        return apiKey;
     }
 
 }
