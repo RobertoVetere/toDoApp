@@ -3,12 +3,15 @@ package com.holidevs.recyclerviewpruebas2.adapters;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.holidevs.recyclerviewpruebas2.R;
@@ -40,11 +43,12 @@ public class AdapterData extends RecyclerView.Adapter<AdapterData.ViewHolderTask
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_list, null, false);
         return new ViewHolderTask(view);
 
-
     }
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolderTask holder, int position) {
+
+        Task task2 = listDatos.get(position);
 
         String title = listDatos.get(position).getTitle();
         String date = listDatos.get(position).getDate();
@@ -77,6 +81,12 @@ public class AdapterData extends RecyclerView.Adapter<AdapterData.ViewHolderTask
             mainActivity.sharedPreferencesLoad();
         });
 
+        holder.btnShowResponse.setOnClickListener(view -> {
+            Animation animation = AnimationUtils.loadAnimation(view.getContext(), R.anim.scale_animation_on_click);
+            view.startAnimation(animation);
+            mainActivity.showChatResponse(task2);
+        });
+
     }
 
     @Override
@@ -91,12 +101,15 @@ public class AdapterData extends RecyclerView.Adapter<AdapterData.ViewHolderTask
         private Button btnDeleteTask;
         private CheckBox checkTask;
 
+        private ConstraintLayout btnShowResponse;
+
         public ViewHolderTask(@NonNull View itemView) {
             super(itemView);
             title = itemView.findViewById(R.id.txt_task);
             date = itemView.findViewById(R.id.txt_date);
             btnDeleteTask = itemView.findViewById(R.id.btn_delete);
             checkTask = itemView.findViewById(R.id.checkboxTask);
+            btnShowResponse = itemView.findViewById(R.id.box_clic_Show);
         }
     }
 

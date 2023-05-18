@@ -1,51 +1,60 @@
 package com.holidevs.recyclerviewpruebas2.activities;
-
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.animation.AnimatorSet;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.os.Handler;
 import android.util.Log;
 import android.view.View;
+import android.view.animation.AlphaAnimation;
 import android.widget.Button;
 import android.widget.TextView;
-
-import okhttp3.Headers;
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
-import retrofit2.Retrofit;
-import retrofit2.converter.gson.GsonConverterFactory;
-
+import android.widget.Toast;
+import com.android.volley.AuthFailureError;
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.JsonObjectRequest;
+import com.android.volley.toolbox.Volley;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
-import com.holidevs.recyclerviewpruebas2.ChatGptModels.ChatGptRequest;
-import com.holidevs.recyclerviewpruebas2.ChatGptModels.ChatGptResponse;
 import com.holidevs.recyclerviewpruebas2.R;
 import com.holidevs.recyclerviewpruebas2.adapters.AdapterData;
-import com.holidevs.recyclerviewpruebas2.interfaces.ChatGptService;
 import com.holidevs.recyclerviewpruebas2.models.Task;
-
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
-
 import java.io.IOException;
 import java.io.InputStream;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
-import java.util.List;
+import java.util.HashMap;
+import java.util.Map;
 
 public class MainActivity extends AppCompatActivity {
 
     private ArrayList<Task> listDatos;
-    private Button btn_add;
-
+    private Button btnAdd;
     private TextView textViewSummary;
     private AdapterData taskAdapter;
+    private RequestQueue requestQueue;
+    private String API_KEY;
 
+    private static final int DELAY_MILLIS = 30; // Velocidad de escritura en milisegundos
+
+    private Handler messageHandler;
+    private Runnable messageRunnable;
+
+    private AnimatorSet dotsAnimatorSet;
+
+    private static final String URL = "https://api.openai.com/v1/chat/completions";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -60,24 +69,23 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void initComponents() {
-        btn_add = findViewById(R.id.btn_add);
+        btnAdd = findViewById(R.id.btn_add);
         textViewSummary = findViewById(R.id.textChatGptResponse);
-
-        //btn_all_tasks = findViewById(R.id.btn_allTasks);
-        //btn_personal = findViewById(R.id.btn_personal);
-        //btn_professional = findViewById(R.id.btn_professional);
+        requestQueue = Volley.newRequestQueue(this);
+        API_KEY = readApiKeyFromConfig();
+        Log.i("GPT", API_KEY);
     }
 
     private void setupRecyclerView() {
-        RecyclerView recycler = findViewById(R.id.recyclerID);
+        RecyclerView recyclerView = findViewById(R.id.recyclerID);
         LinearLayoutManager layoutManager = new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false);
-        recycler.setLayoutManager(layoutManager);
+        recyclerView.setLayoutManager(layoutManager);
         taskAdapter = new AdapterData(listDatos, this);
-        recycler.setAdapter(taskAdapter);
+        recyclerView.setAdapter(taskAdapter);
     }
 
     private void setListeners() {
-        btn_add.setOnClickListener(new View.OnClickListener() {
+        btnAdd.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(MainActivity.this, SetNewTaskActivity.class);
@@ -87,62 +95,7 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
-    private void callToChatGPT(String taskTitle, String taskDate, Task task) {
 
-        String API_KEY = readApiKeyFromConfig();
-
-        Log.i("API_KEY", "API Key: " + API_KEY);
-
-        String prompt = "Resumen detallado para la tarea: " + taskTitle + ", Fecha: " + taskDate;
-
-        // Configura Retrofit
-        Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl("https://api.openai.com/")
-                .addConverterFactory(GsonConverterFactory.create())
-                .build();
-
-        // Crea una instancia del servicio de la API
-        ChatGptService chatGptService = retrofit.create(ChatGptService.class);
-
-        // Crea el objeto de solicitud
-        ChatGptRequest request = new ChatGptRequest(prompt);
-
-        // Agrega el encabezado de autorización con tu clave de API
-        String authorizationHeader = "Bearer " + API_KEY;
-        Headers headers = new Headers.Builder().add("Authorization", authorizationHeader).build();
-
-
-        Log.i("ChatGptRequest", "Prompt: " + request.getPrompt());
-        Log.i("ChatGptRequest", "Authorization Header: " + authorizationHeader);
-
-        // Realiza la solicitud a la API
-        Call<ChatGptResponse> call = chatGptService.sendMessage(request);
-        call.enqueue(new Callback<ChatGptResponse>() {
-            @Override
-            public void onResponse(Call<ChatGptResponse> call, Response<ChatGptResponse> response) {
-                if (response.isSuccessful()) {
-                    ChatGptResponse chatResponse = response.body();
-                    // Procesa la respuesta y muestra el resumen al usuario
-                    String summary = chatResponse.getSummary();
-                    // Muestra el resumen en la vista de texto (TextView)
-                    task.setChatResponse(summary);
-                    System.out.println(summary);
-
-                    Log.i("ChatResponse", "OK");
-                    Log.i("ChatGptResponse", "Response: " + response);
-                } else {
-                    Log.i("ChatResponse", "KO");
-                }
-            }
-
-            @Override
-            public void onFailure(Call<ChatGptResponse> call, Throwable t) {
-                System.out.println("La tarea no ha llegado");
-            }
-        });
-
-
-    }
 
     public void sharedPreferencesLoad() {
         SharedPreferences sharedPreferences = getSharedPreferences("SharedPreferences", MODE_PRIVATE);
@@ -170,27 +123,22 @@ public class MainActivity extends AppCompatActivity {
         if (requestCode == 1 && resultCode == RESULT_OK && data != null) {
             String newTaskTitle = data.getStringExtra("new_task_title");
             String newTaskDate = data.getStringExtra("new_task_date");
-            //boolean isChecked = data.getBooleanExtra("is_checked", false);
             Task newTask = new Task(newTaskTitle, newTaskDate, false, "");
             listDatos.add(newTask);
             taskAdapter.updateTasks(listDatos);
 
             saveSharedPreferences();
-
-            //obtener la respuesta de Chatgpt
-            callToChatGPT(newTaskTitle, newTaskDate, newTask);
+            Log.i("Pruebas GPT", "On Activity OK ");
+            makeAPIRequest(newTaskTitle, newTask);
         }
     }
 
     public void saveSharedPreferences() {
-
-        // Guardar la lista actualizada en SharedPreferences
         SharedPreferences sharedPreferences = getSharedPreferences("SharedPreferences", MODE_PRIVATE);
         SharedPreferences.Editor editor = sharedPreferences.edit();
         String taskListJson = new Gson().toJson(listDatos);
         editor.putString("tasks", taskListJson);
         editor.apply();
-
     }
 
     private String readApiKeyFromConfig() {
@@ -208,5 +156,102 @@ public class MainActivity extends AppCompatActivity {
         }
         return apiKey;
     }
+
+    private void makeAPIRequest(String title, Task task) {
+
+        Log.i("Pruebas GPT", "On api Request OK ");
+        JSONArray messages = new JSONArray();
+        JSONObject message1 = new JSONObject();
+
+        try {
+            message1.put("role", "user");
+            message1.put("content",  title);
+            messages.put(message1);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+        JSONObject jsonBody = new JSONObject();
+        try {
+            jsonBody.put("model", "gpt-3.5-turbo");
+            jsonBody.put("messages", messages);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+        JsonObjectRequest request = new JsonObjectRequest(Request.Method.POST, URL, jsonBody,
+                new Response.Listener<JSONObject>() {
+                    @Override
+                    public void onResponse(JSONObject response) {
+                        try {
+                            JSONArray choices = response.getJSONArray("choices");
+                            JSONObject completion = choices.getJSONObject(0);
+                            String generatedText = completion.getJSONObject("message").getString("content");
+
+
+
+                            // Configurar la respuesta generada en el objeto Task
+                            task.setChatResponse(generatedText);
+                            Log.i("Pruebas GPT", "On response OK ");
+                            Toast.makeText(MainActivity.this, "Respuesta: " + generatedText, Toast.LENGTH_SHORT).show();
+                            Log.i("Pruebas GPT", "Respuesta: " + generatedText);
+                            Log.i("ChatResponse", "Respuesta: " + task.getChatResponse());
+
+                            showChatResponse(task);
+
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        Toast.makeText(MainActivity.this, "Error al hacer la llamada a la API", Toast.LENGTH_SHORT).show();
+                    }
+                }) {
+            @Override
+            public Map<String, String> getHeaders() throws AuthFailureError {
+                Map<String, String> headers = new HashMap<>();
+                headers.put("Authorization", "Bearer " + API_KEY);
+                headers.put("Content-Type", "application/json");
+                return headers;
+            }
+        };
+
+        requestQueue.add(request);
+    }
+
+        public void showChatResponse(Task task) {
+            // Cancelar el mensaje anterior si hay uno en curso
+            if (messageHandler != null && messageRunnable != null) {
+                messageHandler.removeCallbacks(messageRunnable);
+            }
+
+            String response = task.getChatResponse();
+            textViewSummary.setText(""); // Limpiar el texto actual del TextView
+
+            // Mostrar los puntos suspensivos
+            final StringBuilder stringBuilder = new StringBuilder("...");
+            textViewSummary.setText(stringBuilder.toString());
+
+            // Mostrar el mensaje letra a letra después de los puntos suspensivos
+            messageHandler = new Handler();
+            messageRunnable = new Runnable() {
+                int index = 0;
+
+                @Override
+                public void run() {
+                    if (index < response.length()) {
+                        stringBuilder.append(response.charAt(index++));
+                        textViewSummary.setText(stringBuilder.toString());
+                        messageHandler.postDelayed(this, DELAY_MILLIS);
+                    }
+                }
+            };
+
+            // Iniciar la tarea de mostrar el mensaje
+            messageHandler.postDelayed(messageRunnable, DELAY_MILLIS * 4); // Retraso de 4 veces el DELAY_MILLIS para los puntos suspensivos
+        }
 
 }
